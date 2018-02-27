@@ -28,8 +28,7 @@ app.get('/api/courses', (req, res) => {
 app.post('/api/courses', (req, res) => {
     const { error } = validateCourse(req.body);
 
-    if (error)
-        return res.status(400).send(error.details.map((e) => e.message).reduce((current, next) => { return !current ? next : `${current},\n${next}`; }));
+    if (error) return res.status(400).send(error.details.map((e) => e.message).reduce((current, next) => { return !current ? next : `${current},\n${next}`; }));
 
     const course = {
         id: courses.length + 1,
