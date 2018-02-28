@@ -1,3 +1,4 @@
+const config = require('config');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const Joi = require('joi');
@@ -10,8 +11,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(helmet());
-app.use(morgan('tiny'));
 
+if (app.get('env') === 'development') {
+    app.use(morgan('tiny'));
+    console.log('Logging enabled');
+}
 
 app.use(logger);
 app.use(authenticator);
@@ -20,10 +24,10 @@ const registerGenre = require('./vidly-genres');
 registerGenre(app);
 
 app.get('/', (req, res) => {
-    res.send('Home');
+    res.send(config.get('name'));
 });
 
-const port = process.env.PORT || 3000;
+const port = process.env.PORT;
 app.listen(port, () => {
     console.log(`Listening on port ${port}...`)
 });
