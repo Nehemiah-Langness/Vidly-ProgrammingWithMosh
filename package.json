@@ -4,8 +4,8 @@
     "description": "",
     "main": "vidly.js",
     "scripts": {
-        "test": "set NODE_ENV='development' && nodemon vidly.js",
-        "start": "set NODE_ENV='production' && node vidly.js"
+        "test": "set NODE_ENV=development&&set DEBUG=app:*&&nodemon vidly.js",
+        "start": "set NODE_ENV=production&&set DEBUG=&&node vidly.js"
     },
     "keywords": [],
     "author": "",
