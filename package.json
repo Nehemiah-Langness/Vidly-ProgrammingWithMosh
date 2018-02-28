@@ -1,17 +1,19 @@
 {
-  "name": "vidly-programming-with-mosh",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "nodemon index.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "express": "^4.16.2",
-    "joi": "^13.1.2",
-    "mongoose": "^5.0.7"
-  }
+    "name": "vidly-programming-with-mosh",
+    "version": "1.0.0",
+    "description": "",
+    "main": "vidly.js",
+    "scripts": {
+        "test": "nodemon vidly.js"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.16.2",
+        "helmet": "^3.11.0",
+        "joi": "^13.1.2",
+        "mongoose": "^5.0.7",
+        "morgan": "^1.9.0"
+    }
 }
