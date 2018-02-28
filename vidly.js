@@ -9,6 +9,10 @@ const logger = require('./logger');
 const authenticator = require('./authenticator');
 
 const app = express();
+
+app.set('view engine', 'pug');
+app.set('views', './views'); // DEFAULT
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
@@ -26,7 +30,10 @@ const registerGenre = require('./vidly-genres');
 registerGenre(app);
 
 app.get('/', (req, res) => {
-    res.send(config.get('name'));
+    res.render('index', {
+        title: 'Vidly',
+        message: 'Welcome to Vidly'
+    });
 });
 
 const port = process.env.PORT;
