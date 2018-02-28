@@ -1,3 +1,5 @@
+const debug = require('debug')('app:startup');
+
 const config = require('config');
 const morgan = require('morgan');
 const helmet = require('helmet');
@@ -14,7 +16,7 @@ app.use(helmet());
 
 if (app.get('env') === 'development') {
     app.use(morgan('tiny'));
-    console.log('Logging enabled');
+    debug('Logging enabled');
 }
 
 app.use(logger);
@@ -29,5 +31,5 @@ app.get('/', (req, res) => {
 
 const port = process.env.PORT;
 app.listen(port, () => {
-    console.log(`Listening on port ${port}...`)
+    debug(`Listening on port ${port}...`)
 });
