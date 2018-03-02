@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const Fawn = require('fawn');
+Fawn.init(mongoose);
+
 const customer = require('./customer');
 const movie = require('./movie');
 
@@ -63,38 +66,55 @@ const joiSchema = {
         .required()
 }
 
-var repository = require('./repository')(Movie, joiSchema);
+var repository = require('./repository')(Rental, joiSchema);
 
 async function setCustomer(id, entity) {
-    const customer = await customer.repository.get(id);
-    if (!customer) throw new Error('Invalid customer id');
+    const dbCustomer = await customer.repository.get(id);
+    if (!dbCustomer) throw new Error('Invalid customer id');
+    if (!entity.customer)
+        entity.customer = {}
 
-    entity.customer._id = customer._id;
-    entity.customer.name = customer.name;
-    entity.customer.phone = customer.phone;
-    entity.customer.isGold = customer.isGold;
+    entity.customer._id = dbCustomer._id;
+    entity.customer.name = dbCustomer.name;
+    entity.customer.phone = dbCustomer.phone;
+    entity.customer.isGold = dbCustomer.isGold;
+
+    return dbCustomer;
 }
 
 async function setMovie(id, entity) {
-    const movie = await movie.repository.get(id);
-    if (!movie) throw new Error('Invalid movie id');
+    const dbMovie = await movie.repository.get(id);
+    if (!dbMovie) throw new Error('Invalid movie id');
+    if (!entity.movie)
+        entity.movie = {}
 
-    entity.movie._id = movie._id;
-    entity.movie.title = movie.title;
-    entity.movie.dailyRentalRate = movie.dailyRentalRate;
+    entity.movie._id = dbMovie._id;
+    entity.movie.title = dbMovie.title;
+    entity.movie.dailyRentalRate = dbMovie.dailyRentalRate;
 
-    if (movie.numberInStock <= 0)
-        throw new Error('All copies of movie have been checked out');
-
-    movie.numberInStock--;
-    movie.save();
+    return dbMovie;
 }
 
 repository.base.add = async function(Model, entity) {
-    if (entity.customerId) await setCustomer(entity.customerId, entity);
-    if (entity.movieId) await setCustomer(entity.movieId, entity);
+    const transaction = new Fawn.Task();
 
-    return await new Model(entity).save();
+    if (entity.customerId) await setCustomer(entity.customerId, entity);
+    if (entity.movieId) {
+        const movie = await setMovie(entity.movieId, entity);
+
+        if (movie.numberInStock <= 0)
+            throw new Error('All copies of movie have been checked out');
+
+        transaction.update('movies', { _id: movie._id }, {
+            $inc: { numberInStock: -1 }
+        })
+    }
+
+    var rental = new Model(entity);
+    transaction.save('rentals', rental)
+        .run()
+
+    return rental;
 }
 
 repository.base.update = async function(Model, id, values) {
@@ -105,7 +125,7 @@ repository.base.update = async function(Model, id, values) {
 }
 
 repository.base.getMany = async function(Model) {
-    return await model.find().sort('-dateOut');
+    return await Model.find().sort('-dateOut');
 };
 
 module.exports = repository;
