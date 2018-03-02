@@ -2,7 +2,10 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 
 const Customer = mongoose.model('Customer', {
-    isGold: Boolean,
+    isGold: {
+        type: Boolean,
+        default: false
+    },
     name: {
         type: String,
         required: true,

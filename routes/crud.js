@@ -33,6 +33,8 @@ function addCrudPaths(router, modelRepository) {
             if (error) return common.send(res).badRequest(error);
 
             const entity = await repository.add(toAdd);
+            if (!entity) return common.send(res).badRequest();
+
             res.send(entity);
 
         } catch (error) {
@@ -48,7 +50,7 @@ function addCrudPaths(router, modelRepository) {
             if (error) return common.send(res).badRequest(error);
 
             const entity = await repository.update(req.params.id, toUpdate)
-            if (!entity) return common.send(res).notFound();
+            if (!entity) return common.send(res).badRequest();
 
             res.send(entity);
         } catch (error) {

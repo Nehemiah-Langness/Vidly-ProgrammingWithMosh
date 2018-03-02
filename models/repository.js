@@ -40,6 +40,8 @@ module.exports = function(model, schema) {
     }
 
     return {
+        dbSchema: model.schema,
+        validationSchema: schema,
         validate: (entity) => Joi.validate(entity, schema).error,
         base: repository,
         repository: {

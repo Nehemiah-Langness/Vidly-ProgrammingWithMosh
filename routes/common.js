@@ -10,6 +10,13 @@ function serverError(res, error) {
     res.status(500).send(getErrorMessage(error));
 }
 
+function getErrorMessage(error) {
+    if (!error) return "";
+    return error.details
+        .map((e) => e.message)
+        .reduce((current, next) => !current ? next : `${current},\n${next}`)
+}
+
 module.exports.send = function(response) {
     return {
         notFound: () => notFound(response),
