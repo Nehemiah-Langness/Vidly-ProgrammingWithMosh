@@ -12,7 +12,7 @@ const Customer = mongoose.model('Customer', {
     phone: {
         type: String,
         required: true,
-        matches: /^[\d{3}-]{1, 2}\d{4}[\032x?\032?\d+]?$/
+        matches: /^[[\d]{3}[-]?]{1,2}[\d]{4}[[\032]?[x]?[\032]?[\d]+]?$/
     }
 })
 

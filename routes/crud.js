@@ -1,7 +1,7 @@
 const common = require('./common');
 
-function addCrudPaths(router, repo) {
-    const { validate, repository } = repo;
+function addCrudPaths(router, modelRepository) {
+    const { validate, repository } = modelRepository;
 
     // Get-all
     router.get('/', async (req, res) => {
