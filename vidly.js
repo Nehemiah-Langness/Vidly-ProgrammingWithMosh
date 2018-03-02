@@ -17,6 +17,7 @@ app.use(express.static('public'));
 app.use(require('helmet')());
 
 app.use('/api/genres', require('./routes/vidly-genres'));
+app.use('/api/customers', require('./routes/vidly-customers'));
 app.use('/', require('./routes/vidly-index'));
 
 if (app.get('env') === 'development') {
