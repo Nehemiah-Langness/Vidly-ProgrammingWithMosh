@@ -9,16 +9,15 @@ const express = require('express');
 const app = express();
 
 app.set('view engine', 'pug');
-app.set('views', './views'); // DEFAULT
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 app.use(require('helmet')());
 
-app.use('/api/genres', require('./routes/vidly-genres'));
-app.use('/api/customers', require('./routes/vidly-customers'));
-app.use('/', require('./routes/vidly-index'));
+app.use('/api/genres', require('./routes/crud')(require('./models/genre')));
+app.use('/api/customers', require('./routes/crud')(require('./models/customer')));
+app.use('/', require('./routes/home'));
 
 if (app.get('env') === 'development') {
     app.use(require('morgan')('tiny'));

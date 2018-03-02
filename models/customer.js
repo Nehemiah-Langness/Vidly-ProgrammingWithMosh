@@ -16,7 +16,7 @@ const Customer = mongoose.model('Customer', {
     }
 })
 
-const schema = {
+const joiSchema = {
     isGold: Joi.boolean(),
     name: Joi.string()
         .required()
@@ -27,4 +27,4 @@ const schema = {
         .min(8)
 }
 
-module.exports = require('./repository')(Customer, schema);
+module.exports = require('./repository')(Customer, joiSchema);

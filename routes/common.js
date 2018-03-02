@@ -17,8 +17,7 @@ function getErrorMessage(error) {
 }
 
 function addCrudPaths(router, repo) {
-    const validate = repo.validate;
-    const repository = repo.repository;
+    const { validate, repository } = repo;
 
     // Get-all
     router.get('/', async (req, res) => {

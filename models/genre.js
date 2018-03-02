@@ -12,7 +12,7 @@ const Genre = mongoose.model('Genre', new mongoose.Schema({
     createDate: { type: Date, default: Date.now }
 }));
 
-const schema = {
+const joiSchema = {
     name: Joi.string()
         .required()
         .min(3)
@@ -21,4 +21,4 @@ const schema = {
     createDate: Joi.date()
 }
 
-module.exports = require('./repository')(Genre, schema);
+module.exports = require('./repository')(Genre, joiSchema);
