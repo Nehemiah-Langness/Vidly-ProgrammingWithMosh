@@ -1,9 +1,11 @@
 const _ = require('lodash');
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const config = require('config');
+const jwt = require('jsonwebtoken');
 const hashing = require('../hash');
 
-const User = mongoose.model('User', {
+const userSchema = new mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -27,7 +29,17 @@ const User = mongoose.model('User', {
         minlength: 3,
         maxlength: 1024
     }
-})
+});
+
+userSchema.methods.generateAuthToken = function() {
+    return token = jwt.sign({
+            _id: this._id
+        },
+        config.get('jwtPrivateKey'));
+}
+
+const User = mongoose.model('User', userSchema);
+
 
 const joiSchema = {
     name: Joi
@@ -57,7 +69,7 @@ repository.base.add = async function(Model, entity) {
     entity.password = await hashing.getHash(entity.password);
     user = await new Model(_.pick(entity, ['name', 'email', 'password'])).save();
 
-    return _.pick(user, ['name', 'email']);
+    return user;
 }
 
 module.exports = repository;

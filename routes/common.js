@@ -2,6 +2,10 @@ function notFound(res) {
     res.status(404).send('The genre with the specified ID does not exist');
 }
 
+function notAuthorized(res, error) {
+    res.status(401).send('You do not have access to this resource');
+}
+
 function badRequest(res, error) {
     res.status(400).send(getErrorMessage(error));
 }

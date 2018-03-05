@@ -21,12 +21,7 @@ router.post('/', async (req, res) => {
         if (!(await hashing.compare(toAdd.password, user.password)))
             return common.send(res).badRequest('Invalid email or password');
 
-        const token = jwt.sign({
-                _id: user._id
-            },
-            config.get('jwtPrivateKey'));
-
-        res.send(token);
+        res.send(user.generateAuthToken());
 
     } catch (error) {
         if (error instanceof BadRequest)
@@ -36,4 +31,4 @@ router.post('/', async (req, res) => {
 });
 
 
-module.exports = router;
+module.exports.router = router;
