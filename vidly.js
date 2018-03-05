@@ -1,7 +1,14 @@
+const config = require('config');
 const debug = require('debug')('app:startup');
 const mongoose = require('mongoose');
 const Joi = require('joi');
 Joi.objectId = require('joi-objectid')(Joi);
+
+if (!config.get('jwtPrivateKey')) {
+    console.error('FATAL ERROR: jwtPrivateKey is not defined');
+    process.exit(1);
+}
+
 
 mongoose.connect('mongodb://localhost/playground')
     .then(() => debug('Connected to database'))
@@ -22,6 +29,7 @@ app.use('/api/customers', require('./routes/crud')(require('./models/customer'))
 app.use('/api/movies', require('./routes/crud')(require('./models/movie')));
 app.use('/api/rentals', require('./routes/crud')(require('./models/rental')));
 app.use('/api/users', require('./routes/crud')(require('./models/user')));
+app.use('/api/login', require('./routes/auth'));
 app.use('/', require('./routes/home'));
 
 if (app.get('env') === 'development') {

@@ -10,3 +10,4 @@ async function hash(clearText) {
 
 module.exports.getHash = hash;
 module.exports.getSalt = getSalt;
+module.exports.compare = bcrypt.compare
