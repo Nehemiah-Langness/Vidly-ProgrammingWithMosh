@@ -1,4 +1,5 @@
 const common = require('./common');
+const BadRequest = require('./BadRequest');
 
 function addCrudPaths(router, modelRepository) {
     const { validate, repository } = modelRepository;
@@ -9,6 +10,9 @@ function addCrudPaths(router, modelRepository) {
             const entities = await repository.get();
             res.send(entities);
         } catch (error) {
+            if (error instanceof BadRequest)
+                common.send(res).badRequest(error);
+
             common.send(res).serverError(error);
         }
     });
@@ -21,6 +25,8 @@ function addCrudPaths(router, modelRepository) {
 
             res.send(entity);
         } catch (error) {
+            if (error instanceof BadRequest)
+                common.send(res).badRequest(error);
             common.send(res).serverError(error);
         }
     });
@@ -38,6 +44,8 @@ function addCrudPaths(router, modelRepository) {
             res.send(entity);
 
         } catch (error) {
+            if (error instanceof BadRequest)
+                common.send(res).badRequest(error);
             common.send(res).serverError(error);
         }
     });
@@ -54,6 +62,8 @@ function addCrudPaths(router, modelRepository) {
 
             res.send(entity);
         } catch (error) {
+            if (error instanceof BadRequest)
+                common.send(res).badRequest(error);
             common.send(res).serverError(error);
         }
     });
@@ -66,6 +76,8 @@ function addCrudPaths(router, modelRepository) {
 
             res.send(genre);
         } catch (error) {
+            if (error instanceof BadRequest)
+                common.send(res).badRequest(error);
             common.send(res).serverError(error);
         }
     });

@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
 const genre = require('./genre');
+const BadRequest = require('../routes/BadRequest');
 
 const Movie = mongoose.model('Movie', {
     title: {
@@ -53,7 +54,7 @@ var repository = require('./repository')(Movie, joiSchema);
 
 async function setGenre(id, entity) {
     const dbGenre = await genre.repository.get(id);
-    if (!dbGenre) throw new Error('Invalid movie id');
+    if (!dbGenre) throw new BadRequest('Invalid genre id');
     if (!entity.genre)
         entity.genre = {}
 

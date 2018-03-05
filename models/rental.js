@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 const Fawn = require('fawn');
 Fawn.init(mongoose);
+const BadRequest = require('../routes/BadRequest');
 
 const customer = require('./customer');
 const movie = require('./movie');
@@ -70,7 +71,7 @@ var repository = require('./repository')(Rental, joiSchema);
 
 async function setCustomer(id, entity) {
     const dbCustomer = await customer.repository.get(id);
-    if (!dbCustomer) throw new Error('Invalid customer id');
+    if (!dbCustomer) throw new BadRequest('Invalid customer id');
     if (!entity.customer)
         entity.customer = {}
 
@@ -84,7 +85,7 @@ async function setCustomer(id, entity) {
 
 async function setMovie(id, entity) {
     const dbMovie = await movie.repository.get(id);
-    if (!dbMovie) throw new Error('Invalid movie id');
+    if (!dbMovie) throw new BadRequest('Invalid movie id');
     if (!entity.movie)
         entity.movie = {}
 
@@ -103,7 +104,7 @@ repository.base.add = async function(Model, entity) {
         const movie = await setMovie(entity.movieId, entity);
 
         if (movie.numberInStock <= 0)
-            throw new Error('All copies of movie have been checked out');
+            throw new BadRequest('All copies of movie have been checked out');
 
         transaction.update('movies', { _id: movie._id }, {
             $inc: { numberInStock: -1 }

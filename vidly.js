@@ -21,6 +21,7 @@ app.use('/api/genres', require('./routes/crud')(require('./models/genre')));
 app.use('/api/customers', require('./routes/crud')(require('./models/customer')));
 app.use('/api/movies', require('./routes/crud')(require('./models/movie')));
 app.use('/api/rentals', require('./routes/crud')(require('./models/rental')));
+app.use('/api/users', require('./routes/crud')(require('./models/user')));
 app.use('/', require('./routes/home'));
 
 if (app.get('env') === 'development') {
