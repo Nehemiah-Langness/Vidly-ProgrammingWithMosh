@@ -12,9 +12,14 @@ function serverError(res, error) {
 
 function getErrorMessage(error) {
     if (!error) return "";
-    return error.details
-        .map((e) => e.message)
-        .reduce((current, next) => !current ? next : `${current},\n${next}`)
+    if (error.details)
+        return error.details
+            .map((e) => e.message)
+            .reduce((current, next) => !current ? next : `${current},\n${next}`)
+    if (error.message)
+        return error.message;
+
+    return error;
 }
 
 module.exports.send = function(response) {
