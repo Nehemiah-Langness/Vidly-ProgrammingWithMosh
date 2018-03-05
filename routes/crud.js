@@ -1,10 +1,8 @@
 const common = require('./common');
 const BadRequest = require('./BadRequest');
 
-
-
 function addCrudPaths(router, modelRepository) {
-    const { validate, repository } = modelRepository;
+    const { validate, repository, permissions } = modelRepository;
 
     const actions = {
         getAll: async function(req, res, validate, repository) {
@@ -56,7 +54,7 @@ function addCrudPaths(router, modelRepository) {
 
 
     // Get-all
-    router.get('/', async (req, res) => {
+    router.get('/', permissions.getAll, async (req, res) => {
         try {
             await actions.getAll(req, res, validate, repository);
         } catch (error) {
@@ -65,8 +63,9 @@ function addCrudPaths(router, modelRepository) {
     });
 
     // Get
-    router.get('/:id', async (req, res) => {
+    router.get('/:id', permissions.get, async (req, res) => {
         try {
+
             await actions.get(req.params.id, req, res, validate, repository);
         } catch (error) {
             await actions.handleError(res, error);
@@ -74,7 +73,7 @@ function addCrudPaths(router, modelRepository) {
     });
 
     // Add
-    router.post('/', async (req, res) => {
+    router.post('/', permissions.add, async (req, res) => {
         try {
             await actions.add(req.body, req, res, validate, repository)
         } catch (error) {
@@ -83,7 +82,7 @@ function addCrudPaths(router, modelRepository) {
     });
 
     // Update
-    router.put('/:id', async (req, res) => {
+    router.put('/:id', permissions.update, async (req, res) => {
         try {
             await actions.update(req.params.id, req.body, req, res, validate, repository);
         } catch (error) {
@@ -92,7 +91,7 @@ function addCrudPaths(router, modelRepository) {
     });
 
     // Delete
-    router.delete('/:id', async (req, res) => {
+    router.delete('/:id', permissions.remove, async (req, res) => {
         try {
             await actions.remove(req.params.id, req, res, validate, repository);
         } catch (error) {
@@ -104,7 +103,7 @@ function addCrudPaths(router, modelRepository) {
 }
 
 module.exports = function(model) {
-    const router = require('express').Router();
+    const router = model.router ? model.router : require('express').Router();
     const actions = addCrudPaths(router, model);
     return {
         router: router,

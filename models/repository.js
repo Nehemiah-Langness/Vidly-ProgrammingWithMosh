@@ -1,6 +1,15 @@
 const Joi = require('joi');
 
-module.exports = function(model, schema) {
+module.exports = function(model, schema, middleware) {
+
+    if (!middleware)
+        middleware = {
+            get: [],
+            getAll: [],
+            add: [],
+            update: [],
+            remove: []
+        }
 
     const repository = {
         get: async function(Model, id) {
@@ -48,6 +57,7 @@ module.exports = function(model, schema) {
             update: update,
             remove: remove,
             get: get
-        }
+        },
+        permissions: middleware
     }
 }
