@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
+Joi.objectId = require('joi-objectid')(Joi);
 const Fawn = require('fawn');
 Fawn.init(mongoose);
 
@@ -59,10 +60,10 @@ const Rental = mongoose.model('Rental', {
 
 const joiSchema = {
     customerId: Joi
-        .string()
+        .objectId()
         .required(),
     movieId: Joi
-        .string()
+        .objectId()
         .required()
 }
 
