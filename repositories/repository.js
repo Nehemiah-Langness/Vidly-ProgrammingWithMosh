@@ -1,9 +1,9 @@
 const Joi = require('joi');
 
-module.exports = function(model, schema, middleware) {
+module.exports = function(model, schema, security) {
 
-    if (!middleware)
-        middleware = {
+    if (!security)
+        security = {
             get: [],
             getAll: [],
             add: [],
@@ -58,6 +58,6 @@ module.exports = function(model, schema, middleware) {
             remove: remove,
             get: get
         },
-        permissions: middleware
+        permissions: security
     }
 }

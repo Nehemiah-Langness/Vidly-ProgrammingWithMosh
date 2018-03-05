@@ -21,4 +21,4 @@ const joiSchema = {
     createDate: Joi.date()
 }
 
-module.exports = require('./repository')(Genre, joiSchema);
+module.exports = require('../repositories/repository')(Genre, joiSchema);

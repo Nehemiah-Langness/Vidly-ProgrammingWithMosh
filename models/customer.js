@@ -30,4 +30,4 @@ const joiSchema = {
         .min(8)
 }
 
-module.exports = require('./repository')(Customer, joiSchema);
+module.exports = require('../repositories/repository')(Customer, joiSchema);

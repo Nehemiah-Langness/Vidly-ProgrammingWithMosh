@@ -1,4 +1,5 @@
 const Joi = require('joi');
+
 const joiSchema = {
     email: Joi
         .string()

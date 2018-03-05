@@ -1,11 +1,11 @@
 const mongoose = require('mongoose');
 const Joi = require('joi');
-const Fawn = require('fawn');
-Fawn.init(mongoose);
 const BadRequest = require('../routes/BadRequest');
 
 const customer = require('./customer');
 const movie = require('./movie');
+const Fawn = require('fawn');
+Fawn.init(mongoose);
 
 const Rental = mongoose.model('Rental', {
     customer: {
@@ -67,7 +67,7 @@ const joiSchema = {
         .required()
 }
 
-var repository = require('./repository')(Rental, joiSchema);
+var repository = require('../repositories/repository')(Rental, joiSchema);
 
 async function setCustomer(id, entity) {
     const dbCustomer = await customer.repository.get(id);

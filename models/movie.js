@@ -50,7 +50,7 @@ const joiSchema = {
         .required()
 }
 
-var repository = require('./repository')(Movie, joiSchema);
+var repository = require('../repositories/repository')(Movie, joiSchema);
 
 async function setGenre(id, entity) {
     const dbGenre = await genre.repository.get(id);

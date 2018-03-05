@@ -67,7 +67,7 @@ const joiSchema = {
         .boolean()
 }
 
-var repository = require('./repository')(User, joiSchema);
+var repository = require('../repositories/repository')(User, joiSchema);
 
 repository.base.add = async function(Model, entity) {
     let user = await Model.findOne({ email: entity.email });

@@ -28,7 +28,6 @@ if (app.get('env') === 'development') {
 }
 
 app.use('/api/login', require('./routes/auth').router);
-
 app.use('/api/genres', require('./routes/crud')(require('./models/genre')).router);
 app.use('/api/customers', require('./routes/crud')(require('./models/customer')).router);
 app.use('/api/movies', require('./routes/crud')(require('./models/movie')).router);
