@@ -1,0 +1,21 @@
+const _ = require('lodash');
+const common = require('./common');
+const userModule = require('../models/user');
+
+const userRouteConfig = require('./crud')(userModule);
+userRouteConfig.actions.add = async function(toAdd, req, res, validate, repository) {
+    const error = validate(toAdd);
+    if (error) return common.send(res).badRequest(error);
+
+    const user = await repository.add(toAdd);
+    if (!user) return common.send(res).badRequest();
+
+    res.header('x-auth-token', user.generateAuthToken()).send(_.pick(user, ['name', 'email']));
+}
+
+userRouteConfig.router.get('/me', async (req, res) => {
+    const user = await userModule.repository.get(req.user._id);
+    res.send(_.pick(user, ['name', 'email']));
+});
+
+module.exports = userRouteConfig;

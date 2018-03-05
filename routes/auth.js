@@ -8,6 +8,17 @@ const jwt = require('jsonwebtoken');
 
 const { validate, repository } = require('../models/auth');
 
+router.get('/', async (req, res) => {
+    try {
+        res.send('Login');
+
+    } catch (error) {
+        if (error instanceof BadRequest)
+            common.send(res).badRequest(error);
+        common.send(res).serverError(error);
+    }
+});
+
 // Add
 router.post('/', async (req, res) => {
     try {

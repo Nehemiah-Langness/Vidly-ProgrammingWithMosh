@@ -3,7 +3,7 @@ function notFound(res) {
 }
 
 function notAuthorized(res, error) {
-    res.status(401).send('You do not have access to this resource');
+    res.status(401).send(error ? getErrorMessage(error) : 'You do not have access to this resource');
 }
 
 function badRequest(res, error) {
@@ -30,6 +30,7 @@ module.exports.send = function(response) {
     return {
         notFound: () => notFound(response),
         badRequest: (error) => badRequest(response, error),
-        serverError: (error) => serverError(response, error)
+        serverError: (error) => serverError(response, error),
+        notAuthorized: (error) => notAuthorized(response, error)
     }
 };
