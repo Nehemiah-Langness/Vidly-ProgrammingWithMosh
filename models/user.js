@@ -28,12 +28,17 @@ const userSchema = new mongoose.Schema({
         trim: true,
         minlength: 3,
         maxlength: 1024
+    },
+    isAdmin: {
+        type: Boolean,
+        default: false
     }
 });
 
 userSchema.methods.generateAuthToken = function() {
     return token = jwt.sign({
-            _id: this._id
+            _id: this._id,
+            isAdmin: this.isAdmin
         },
         config.get('jwtPrivateKey'));
 }
@@ -58,6 +63,8 @@ const joiSchema = {
         .required()
         .min(3)
         .max(255),
+    isAdmin: Joi
+        .boolean()
 }
 
 var repository = require('./repository')(User, joiSchema);

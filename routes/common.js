@@ -3,7 +3,11 @@ function notFound(res) {
 }
 
 function notAuthorized(res, error) {
-    res.status(401).send(error ? getErrorMessage(error) : 'You do not have access to this resource');
+    res.status(401).send(error ? getErrorMessage(error) : 'No valid authorizations');
+}
+
+function forbidden(res, error) {
+    res.status(403).send(error ? getErrorMessage(error) : 'You do not have access to this resource');
 }
 
 function badRequest(res, error) {
@@ -31,6 +35,7 @@ module.exports.send = function(response) {
         notFound: () => notFound(response),
         badRequest: (error) => badRequest(response, error),
         serverError: (error) => serverError(response, error),
-        notAuthorized: (error) => notAuthorized(response, error)
+        notAuthorized: (error) => notAuthorized(response, error),
+        forbidden: (error) => forbidden(response, error)
     }
 };
