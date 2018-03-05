@@ -45,31 +45,31 @@ const joiSchema = {
         .min(0)
         .max(255),
     genreId: Joi
-        .string()
+        .objectId()
         .required()
 }
 
 var repository = require('./repository')(Movie, joiSchema);
 
-repository.base.add = async function(Model, entity) {
-    if (entity.genreId) {
-        const genre = await genre.repository.get(genreId);
-        if (!genre) return null;
+async function setGenre(id, entity) {
+    const dbGenre = await genre.repository.get(id);
+    if (!dbGenre) throw new Error('Invalid movie id');
+    if (!entity.genre)
+        entity.genre = {}
 
-        entity.genre._id = genre._id;
-        entity.genre.name = genre.name;
-    }
+    entity.genre._id = dbGenre._id;
+    entity.genre.name = dbGenre.name;
+
+    return dbGenre;
+}
+
+repository.base.add = async function(Model, entity) {
+    if (entity.genreId) await setGenre(entity.genreId, entity);
     return await new Model(entity).save();
 }
 
 repository.base.update = async function(Model, id, values) {
-    if (values.genreId) {
-        const genre = await genre.repository.get(genreId);
-        if (!genre) return null;
-
-        values.genre._id = genre._id;
-        values.genre.name = genre.name;
-    }
+    if (values.genreId) await setGenre(values.genreId, values);
     return await Model.findByIdAndUpdate(id, values, { new: true })
 }
 
