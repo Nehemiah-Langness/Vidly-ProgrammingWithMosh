@@ -1,5 +1,7 @@
+const _ = require('lodash');
 const mongoose = require('mongoose');
 const Joi = require('joi');
+const hashing = require('../hash');
 
 const User = mongoose.model('User', {
     name: {
@@ -52,7 +54,10 @@ repository.base.add = async function(Model, entity) {
     let user = await Model.findOne({ email: entity.email });
     if (user) throw new Error('User already registered');
 
-    return await new Model(entity).save();
+    entity.password = await hashing.getHash(entity.password);
+    user = await new Model(_.pick(entity, ['name', 'email', 'password'])).save();
+
+    return _.pick(user, ['name', 'email']);
 }
 
 module.exports = repository;

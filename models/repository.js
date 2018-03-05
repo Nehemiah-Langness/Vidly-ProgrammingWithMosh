@@ -25,13 +25,11 @@ module.exports = function(model, schema) {
     };
 
     async function update(id, values) {
-        var result = await repository.update(model, id, values, { new: true });
-        return result;
+        return await repository.update(model, id, values);
     }
 
     async function remove(id) {
-        var result = await repository.remove(model, id);
-        return result;
+        return await repository.remove(model, id);
     };
 
     async function get(id) {
