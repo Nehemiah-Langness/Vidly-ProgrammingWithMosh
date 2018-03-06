@@ -52,9 +52,7 @@ app.use('/api/customers', require('./routes/crud')(require('./models/customer'))
 app.use('/api/movies', require('./routes/crud')(require('./models/movie')).router);
 app.use('/api/rentals', require('./routes/crud')(require('./models/rental')).router);
 
-app.use(function(error, req, res, next) {
-
-})
+app.use(require('./middleware/error'));
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

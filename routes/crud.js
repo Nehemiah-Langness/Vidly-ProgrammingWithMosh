@@ -42,62 +42,34 @@ function addCrudPaths(router, modelRepository) {
             if (!genre) return common.send(res).notFound();
 
             res.send(genre);
-        },
-
-        handleError: async function(res, error) {
-            if (error instanceof BadRequest)
-                common.send(res).badRequest(error);
-
-            common.send(res).serverError(error);
         }
     }
 
 
     // Get-all
-    router.get('/', permissions.getAll, async (req, res) => {
-        try {
-            await actions.getAll(req, res, validate, repository);
-        } catch (error) {
-            await actions.handleError(res, error);
-        }
-    });
+    router.get('/', permissions.getAll, common.execute(async (req, res) => {
+        await actions.getAll(req, res, validate, repository);
+    }));
 
     // Get
-    router.get('/:id', permissions.get, async (req, res) => {
-        try {
-
-            await actions.get(req.params.id, req, res, validate, repository);
-        } catch (error) {
-            await actions.handleError(res, error);
-        }
-    });
+    router.get('/:id', permissions.get, common.execute(async (req, res) => {
+        await actions.get(req.params.id, req, res, validate, repository);
+    }));
 
     // Add
-    router.post('/', permissions.add, async (req, res) => {
-        try {
-            await actions.add(req.body, req, res, validate, repository)
-        } catch (error) {
-            await actions.handleError(res, error);
-        }
-    });
+    router.post('/', permissions.add, common.execute(async (req, res, next) => {
+        await actions.add(req.body, req, res, validate, repository)
+    }));
 
     // Update
-    router.put('/:id', permissions.update, async (req, res) => {
-        try {
-            await actions.update(req.params.id, req.body, req, res, validate, repository);
-        } catch (error) {
-            await actions.handleError(res, error);
-        }
-    });
+    router.put('/:id', permissions.update, common.execute(async (req, res, next) => {
+        await actions.update(req.params.id, req.body, req, res, validate, repository);
+    }));
 
     // Delete
-    router.delete('/:id', permissions.remove, async (req, res) => {
-        try {
-            await actions.remove(req.params.id, req, res, validate, repository);
-        } catch (error) {
-            await actions.handleError(res, error);
-        }
-    });
+    router.delete('/:id', permissions.remove, common.execute(async (req, res, next) => {
+        await actions.remove(req.params.id, req, res, validate, repository);
+    }));
 
     return actions;
 }

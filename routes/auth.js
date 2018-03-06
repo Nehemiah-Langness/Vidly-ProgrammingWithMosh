@@ -16,26 +16,20 @@ router.get('/', (req, res) => {
 });
 
 // Add
-router.post('/', async (req, res) => {
-    try {
-        var toAdd = req.body;
-        const error = validate(toAdd);
-        if (error) return common.send(res).badRequest(error);
+router.post('/', common.execute(async (req, res) => {
+    var toAdd = req.body;
+    const error = validate(toAdd);
+    if (error) return common.send(res).badRequest(error);
 
-        let user = await userModule.model.findOne({ email: toAdd.email });
-        if (!user) return common.send(res).badRequest('Invalid email or password');
+    let user = await userModule.model.findOne({ email: toAdd.email });
+    if (!user) return common.send(res).badRequest('Invalid email or password');
 
-        if (!(await hashing.compare(toAdd.password, user.password)))
-            return common.send(res).badRequest('Invalid email or password');
+    if (!(await hashing.compare(toAdd.password, user.password)))
+        return common.send(res).badRequest('Invalid email or password');
 
-        return res.cookie('x-auth-token', user.generateAuthToken()).redirect('/');
+    return res.cookie('x-auth-token', user.generateAuthToken()).redirect('/');
 
-    } catch (error) {
-        if (error instanceof BadRequest)
-            common.send(res).badRequest(error);
-        common.send(res).serverError(error);
-    }
-});
+}));
 
 
 

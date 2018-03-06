@@ -34,6 +34,16 @@ function getErrorMessage(error) {
     return error;
 }
 
+function asyncMiddleware(logic) {
+    return async (req, res, next) => {
+        try {
+            await logic(req, res);
+        } catch (error) {
+            next(error);
+        }
+    }
+}
+
 module.exports.send = function(response) {
     return {
         notFound: () => notFound(response),
@@ -44,3 +54,5 @@ module.exports.send = function(response) {
         redirect: (url) => redirect(response, url)
     }
 };
+
+module.exports.execute = asyncMiddleware;
