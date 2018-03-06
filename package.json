@@ -6,7 +6,9 @@
     "scripts": {
         "testWin": "set vidly_jwtPrivateKey=MyTestKey&&set PORT=3000&&set NODE_ENV=development&&set DEBUG=app:*&&nodemon vidly.js",
         "startWin": "set PORT=8080&&set NODE_ENV=production&&set DEBUG=&&node vidly.js",
-        "start": "node vidly.js"
+        "start": "node vidly.js",
+        "testDocker": "docker-compose up --build",
+        "startDocker": "docker-compose up"
     },
     "keywords": [],
     "author": "",
