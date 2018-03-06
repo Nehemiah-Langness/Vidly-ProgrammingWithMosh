@@ -4,8 +4,9 @@
     "description": "",
     "main": "vidly.js",
     "scripts": {
-        "test": "set vidly_jwtPrivateKey=MyTestKey&&set PORT=3000&&set NODE_ENV=development&&set DEBUG=app:*&&nodemon vidly.js",
-        "start": "set PORT=8080&&set NODE_ENV=production&&set DEBUG=&&node vidly.js"
+        "testWin": "set vidly_jwtPrivateKey=MyTestKey&&set PORT=3000&&set NODE_ENV=development&&set DEBUG=app:*&&nodemon vidly.js",
+        "startWin": "set PORT=8080&&set NODE_ENV=production&&set DEBUG=&&node vidly.js",
+        "start": "node vidly.js"
     },
     "keywords": [],
     "author": "",

@@ -9,9 +9,21 @@ if (!config.get('jwtPrivateKey')) {
     process.exit(1);
 }
 
-mongoose.connect('mongodb://localhost/playground')
-    .then(() => debug('Connected to database'))
-    .catch(error => console.error('Unable to connect to database', error));
+if (config.get('isHosted') !== 'true') {
+    mongoose.connect('mongodb://localhost/playground')
+        .then(() => debug('Connected to database'))
+        .catch(error => {
+            console.error('Unable to connect to database', error);
+            process.exit(1);
+        });
+} else {
+    mongoose.connect('mongodb://mongo/playground')
+        .then(() => debug('Connected to database'))
+        .catch(error => {
+            console.error('Unable to connect to database', error);
+            process.exit(1);
+        });
+}
 
 const express = require('express');
 const app = express();
