@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 const Joi = require('joi');
 const config = require('config');
 const jwt = require('jsonwebtoken');
-const hashing = require('../hash');
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -67,16 +66,4 @@ const joiSchema = {
         .boolean()
 }
 
-var repository = require('../repositories/repository')(User, joiSchema);
-
-repository.base.add = async function(Model, entity) {
-    let user = await Model.findOne({ email: entity.email });
-    if (user) throw new Error('User already registered');
-
-    entity.password = await hashing.getHash(entity.password);
-    user = await new Model(_.pick(entity, ['name', 'email', 'password'])).save();
-
-    return user;
-}
-
-module.exports = repository;
+module.exports = require('../repositories/user')(User, joiSchema);

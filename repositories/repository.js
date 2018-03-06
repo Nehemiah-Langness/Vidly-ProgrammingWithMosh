@@ -1,6 +1,9 @@
 const Joi = require('joi');
 
-module.exports = function(model, schema, security) {
+module.exports = function(model, schema, security, coreRepository) {
+
+    if (!coreRepository)
+        coreRepository = {};
 
     if (!security)
         security = {
@@ -9,22 +12,22 @@ module.exports = function(model, schema, security) {
             add: [],
             update: [],
             remove: []
-        }
+        };
 
     const repository = {
-        get: async function(Model, id) {
+        get: coreRepository.get ? coreRepository.get : async function(Model, id) {
             return await Model.findById(id);
         },
-        getMany: async function(Model) {
-            return await model.find().sort('name');
+        getMany: coreRepository.getMany ? coreRepository.getMany : async function(Model) {
+            return await Model.find().sort('name');
         },
-        add: async function(Model, entity) {
+        add: coreRepository.add ? coreRepository.add : async function(Model, entity) {
             return await new Model(entity).save();
         },
-        update: async function(Model, id, values) {
+        update: coreRepository.update ? coreRepository.update : async function(Model, id, values) {
             return await Model.findByIdAndUpdate(id, values, { new: true });
         },
-        remove: async function(Model, id) {
+        remove: coreRepository.remove ? coreRepository.remove : async function(Model, id) {
             return await Model.findByIdAndRemove(id);
         }
     }
@@ -51,13 +54,13 @@ module.exports = function(model, schema, security) {
         dbSchema: model.schema,
         validationSchema: schema,
         validate: (entity) => Joi.validate(entity, schema).error,
-        base: repository,
         repository: {
             add: add,
             update: update,
             remove: remove,
             get: get
         },
+        core: repository,
         permissions: security
     }
 }
