@@ -1,0 +1,51 @@
+doctype html
+html(lang="en")
+    head
+        title Register
+        include resources.pug
+    body
+        include header.pug
+        div.container
+            br
+            h1= message
+
+            #error.alert.alert-danger(style={display: 'none'})
+
+            form#main-form(action="/api/users" method="POST")
+                div.text-center
+                    div.card.text-left
+                        div.card-header.bg-secondary.text-white
+                            span.h5 Login
+                        div.card-body
+                            div.form-group
+                                label Name
+                                input.form-control(name="name" id="name")
+                            div.form-group
+                                label Email
+                                input.form-control(name="email" id="email")
+                            div.form-group
+                                label Password
+                                input.form-control(
+                                    type="password"
+                                    name="password" id="password"
+                                )
+                        div.card-footer
+                            button.btn.btn-primary.float-right Login
+        script.
+            $(document).ready(function(){
+                $("#main-form").submit(function (e){
+                    e.preventDefault();
+
+                    var form = $(this);
+                    $.ajax(form.prop("action"), {
+                        method: form.prop("method"),
+                        data: form.serialize(),
+                        error: function (xhr, status, message){
+                            $("#error").empty().text(xhr.responseText ? xhr.responseText : status + " " + message).show();
+                        },
+                        success: function (data, message, xhr){
+                            window.location.href = "/";
+                        }
+                    });
+                });
+            });

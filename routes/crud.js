@@ -1,5 +1,5 @@
 const common = require('./common');
-const BadRequest = require('./BadRequest');
+const BadRequest = require('../errors/BadRequest');
 
 function addCrudPaths(router, modelRepository) {
     const { validate, repository, permissions } = modelRepository;

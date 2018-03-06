@@ -14,5 +14,11 @@ module.exports = function(model, validationSchema) {
         }
     }
 
-    return require('./repository')(model, validationSchema, null, core);
+    return require('./repository')(model, validationSchema, {
+        get: require('../middleware/authorize'),
+        getAll: require('../middleware/authorize'),
+        update: require('../middleware/authorize'),
+        remove: require('../middleware/authorize'),
+        add: []
+    }, core);
 };

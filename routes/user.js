@@ -16,9 +16,7 @@ userRouteConfig.actions.add = async function(toAdd, req, res, validate, reposito
     const user = await repository.add(toAdd);
     if (!user) return common.send(res).badRequest();
 
-    res.header('x-auth-token', user.generateAuthToken()).send(_.pick(user, ['name', 'email']));
+    return res.cookie('x-auth-token', user.generateAuthToken()).redirect('/');
 }
-
-
 
 module.exports = userRouteConfig;

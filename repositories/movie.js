@@ -1,5 +1,5 @@
 const genre = require('../models/genre');
-const BadRequest = require('../routes/BadRequest');
+const BadRequest = require('../errors/BadRequest');
 
 async function setGenre(id, entity) {
     const dbGenre = await genre.repository.get(id);

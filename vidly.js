@@ -31,21 +31,30 @@ const app = express();
 app.set('view engine', 'pug');
 
 app.use(express.json());
+app.use(require('cookie-parser')());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+
 app.use(require('helmet')());
 if (app.get('env') === 'development') {
     app.use(require('morgan')('tiny'));
     debug('Logging enabled');
 }
 
-app.use('/api/login', require('./routes/auth').router);
+app.use(require('./middleware/authenticator'));
+app.use('/', require('./routes/home'));
+app.use('/api/users', require('./routes/user').router);
+app.use('/login', require('./routes/auth').router);
+
+app.use(require('./middleware/authorize'));
 app.use('/api/genres', require('./routes/crud')(require('./models/genre')).router);
 app.use('/api/customers', require('./routes/crud')(require('./models/customer')).router);
 app.use('/api/movies', require('./routes/crud')(require('./models/movie')).router);
 app.use('/api/rentals', require('./routes/crud')(require('./models/rental')).router);
-app.use('/api/users', require('./routes/user').router);
-app.use('/', require('./routes/home'));
+
+app.use(function(error, req, res, next) {
+
+})
 
 const port = process.env.PORT || 3000;
 app.listen(port, () => {

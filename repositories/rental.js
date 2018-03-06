@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const BadRequest = require('../routes/BadRequest');
+const BadRequest = require('../errors/BadRequest');
 const customer = require('../models/customer');
 const movie = require('../models/movie');
 const Fawn = require('fawn');

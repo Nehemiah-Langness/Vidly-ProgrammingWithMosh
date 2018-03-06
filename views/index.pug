@@ -2,5 +2,9 @@ doctype html
 html(lang="en")
     head
         title= title
+        include resources.pug
     body
-        h1= message
+        include header.pug
+        div.container
+            br
+            h1= message

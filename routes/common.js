@@ -18,6 +18,10 @@ function serverError(res, error) {
     res.status(500).send(getErrorMessage(error));
 }
 
+function redirect(res, url) {
+    res.redirect(url);
+}
+
 function getErrorMessage(error) {
     if (!error) return "";
     if (error.details)
@@ -36,6 +40,7 @@ module.exports.send = function(response) {
         badRequest: (error) => badRequest(response, error),
         serverError: (error) => serverError(response, error),
         notAuthorized: (error) => notAuthorized(response, error),
-        forbidden: (error) => forbidden(response, error)
+        forbidden: (error) => forbidden(response, error),
+        redirect: (url) => redirect(response, url)
     }
 };
